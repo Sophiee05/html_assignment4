@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration and Login Forms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .form-container {
+            width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input[type="radio"] {
+            width: auto;
+        }
+        .form-group input[type="checkbox"] {
+            width: auto;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        <form id="registrationForm" onsubmit="return validateRegistration()">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+                <div class="error" id="nameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                <div class="error" id="emailError"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+                <div class="error" id="passwordError"></div>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" required>
+                <div class="error" id="confirmPasswordError"></div>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" required>
+                <div class="error" id="ageError"></div>
+            </div>
+            <div class="form-group">
+                <label>Gender:</label>
+                <input type="radio" name="gender" value="Male" required> Male
+                <input type="radio" name="gender" value="Female" required> Female
+                <div class="error" id="genderError"></div>
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" required>
+                    <option value="">Select your country</option>
+                    <option value="USA">Nigeria</option>
+                    <option value="Canada">Kenya</option>
+                    <option value="UK">South Africa</option>
+                </select>
+                <div class="error" id="countryError"></div>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="terms" required> I agree to the terms and conditions
+                <div class="error" id="termsError"></div>
+            </div>
+            <div class="form-group">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-container" style="margin-top: 20px;">
+        <h2>Login Form</h2>
+        <form id="loginForm" onsubmit="return validateLogin()">
+            <div class="form-group">
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" required>
+                <div class="error" id="loginEmailError"></div>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" required>
+                <div class="error" id="loginPasswordError"></div>
+            </div>
+            <div class="form-group">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function validateRegistration() {
+            let isValid = true;
+
+            const name = document.getElementById("name").value.trim();
+            const nameError = document.getElementById("nameError");
+            nameError.innerText = name ? "" : "Name is required.";
+            isValid = isValid && !!name;
+
+            const email = document.getElementById("email").value.trim();
+            const emailError = document.getElementById("emailError");
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            emailError.innerText = emailRegex.test(email) ? "" : "Invalid email format.";
+            isValid = isValid && emailRegex.test(email);
+
+            const password = document.getElementById("password").value.trim();
+            const confirmPassword = document.getElementById("confirmPassword").value.trim();
+            const passwordError = document.getElementById("passwordError");
+            const confirmPasswordError = document.getElementById("confirmPasswordError");
+            passwordError.innerText = password.length >= 8 ? "" : "Password must be at least 8 characters.";
+            confirmPasswordError.innerText = password === confirmPassword ? "" : "Passwords do not match.";
+            isValid = isValid && password.length >= 8 && password === confirmPassword;
+
+            const age = parseInt(document.getElementById("age").value.trim());
+            const ageError = document.getElementById("ageError");
+            ageError.innerText = age >= 18 && age <= 100 ? "" : "Age must be between 18 and 100.";
+            isValid = isValid && age >= 18 && age <= 100;
+
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const genderError = document.getElementById("genderError");
+            genderError.innerText = gender ? "" : "Gender is required.";
+            isValid = isValid && !!gender;
+
+            const country = document.getElementById("country").value.trim();
+            const countryError = document.getElementById("countryError");
+            countryError.innerText = country ? "" : "Country is required.";
+            isValid = isValid && !!country;
+
+            const terms = document.getElementById("terms").checked;
+            const termsError = document.getElementById("termsError");
+            termsError.innerText = terms ? "" : "You must agree to the terms and conditions.";
+            isValid = isValid && terms;
+
+            return isValid;
+        }
+
+        function validateLogin() {
+            let isValid = true;
+
+            const loginEmail = document.getElementById("loginEmail").value.trim();
+            const loginEmailError = document.getElementById("loginEmailError");
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            loginEmailError.innerText = emailRegex.test(loginEmail) ? "" : "Invalid email format.";
+            isValid = isValid && emailRegex.test(loginEmail);
+
+            const loginPassword = document.getElementById("loginPassword").value.trim();
+            const loginPasswordError = document.getElementById("loginPasswordError");
+            loginPasswordError.innerText = loginPassword ? "" : "Password is required.";
+            isValid = isValid && !!loginPassword;
+
+            return isValid;
+        }
+    </script>
+</body>
+</html>
